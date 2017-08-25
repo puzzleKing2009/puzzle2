@@ -1,0 +1,69 @@
+<HTML>
+	<body onload="start()">
+		<div>
+			Welcome to click the dot! All you have to do is click the circle to get a point!<br>
+			If you miss a circle your score will be reset. You win at 100 points!
+		</div>
+		<canvas id="myCanvas" width="700" height="600"></canvas>
+		<span style="position:absolute; top:0; right:50;">Score: <span id="score"></span></span>
+	</body>
+	<script>
+		var size;
+		var xPos;
+		var yPos;
+		var score = 0;
+		var oldScore;
+		function start(){
+			var canvas = document.getElementById("myCanvas");
+			canvas.addEventListener('click', function(event) {
+			var xClick = event.pageX;
+			var yClick = event.pageY;
+			if(Math.abs(xClick-xPos) <= (size*1.2)){
+				if(Math.abs(yClick-yPos) <= (size*1.2)){
+					score+=1;
+				}
+			}
+			}, false);
+			setInterval(play, 500);
+			/*
+			circle = new Circle(RADIUS);
+			circle.setPosition();
+			add(circle);
+			setTimer(color, 1000); */
+		}
+
+		function play(){
+			if(score >= 100)
+				winGame();
+			var scoreBoard = document.getElementById("score");
+			if(oldScore == score)
+				score = 0;
+			scoreBoard.innerText = score;
+			oldScore = score;
+			 size = (Math.random()*200);
+			 xPos = (Math.random()*700);
+			if((xPos + size) > 700)
+				xPos -= size;
+			if((xPos - size) < 0)
+				xPos += size;
+			 yPos = (Math.random()*600);
+			if((yPos + size) > 600)
+				yPos -= size;
+			if((yPos - size) < 0)
+				yPos += size;
+			var c = document.getElementById("myCanvas");
+			var ctx = c.getContext("2d");
+			ctx.beginPath();
+			ctx.arc(xPos, yPos, size,0,2*Math.PI);
+			var rndR = Math.round(Math.random()*255);
+			var rndB = Math.round(Math.random()*255);
+			var rndG = Math.round(Math.random()*255);
+			var colorStr = 'rgb('+rndR+','+rndB+','+rndG+')';
+			ctx.fillStyle = colorStr;
+			ctx.clearRect(0,0,700,600);
+			ctx.fill();	
+			ctx.stroke();
+		}
+	</script>
+	<script src="backend.js"></script>
+</HTML>
